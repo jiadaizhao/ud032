@@ -24,7 +24,12 @@ def parse_file(datafile):
     name = ""
     data = []
     with open(datafile,'rb') as f:
-        pass
+        source = f.readline().split(',')
+        name = source[1].strip('"')
+        f.readline()
+        d = csv.reader(f, delimiter=',')
+        for row in d:
+            data.append(row)
     # Do not change the line below
     return (name, data)
 

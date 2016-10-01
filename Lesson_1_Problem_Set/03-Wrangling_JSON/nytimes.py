@@ -39,7 +39,12 @@ def article_overview(kind, period):
     titles = []
     urls =[]
     # YOUR CODE HERE
-
+    for d in data:
+        titles.append({d["section"]:d["title"]})
+        for m in d["media"]:
+            for mm in m["media-metadata"]:
+                if mm["format"] == "Standard Thumbnail":
+                    urls.append(mm["url"])
     return (titles, urls)
 
 
