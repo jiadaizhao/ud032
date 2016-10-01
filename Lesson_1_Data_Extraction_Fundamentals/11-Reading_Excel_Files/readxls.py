@@ -9,6 +9,7 @@ Your task is as follows:
 Please see the test function for the expected return format
 """
 
+import numpy as np
 import xlrd
 from zipfile import ZipFile
 datafile = "2013_ERCOT_Hourly_Load_Data.xls"
@@ -45,15 +46,22 @@ def parse_file(datafile):
     # print exceltime
     # print "Convert time to a Python datetime tuple, from the Excel float:",
     # print xlrd.xldate_as_tuple(exceltime, 0)
-    
-    
+
+    coast = sheet.col_values(1, start_rowx=1)
+    maxvalue = max(coast)
+    minvalue = min(coast)
+    maxtime = xlrd.xldate_as_tuple(sheet.cell_value(coast.index(maxvalue) + 1, 0), 0)
+    mintime = xlrd.xldate_as_tuple(sheet.cell_value(coast.index(minvalue) + 1, 0), 0)
+    avgcoast = np.mean(coast)
+      
     data = {
-            'maxtime': (0, 0, 0, 0, 0, 0),
-            'maxvalue': 0,
-            'mintime': (0, 0, 0, 0, 0, 0),
-            'minvalue': 0,
-            'avgcoast': 0
+            'maxtime': maxtime,
+            'maxvalue': maxvalue,
+            'mintime': mintime,
+            'minvalue': minvalue,
+            'avgcoast': avgcoast
     }
+
     return data
 
 

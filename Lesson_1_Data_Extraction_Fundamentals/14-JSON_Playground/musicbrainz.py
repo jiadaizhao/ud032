@@ -3,6 +3,7 @@
 # but you will not be able to run any queries through our UI.
 import json
 import requests
+import pprint
 
 
 BASE_URL = "http://musicbrainz.org/ws/2/"
@@ -38,6 +39,7 @@ def pretty_print(data, indent=4):
 
 
 def main():
+    '''
     results = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
     pretty_print(results)
 
@@ -54,6 +56,36 @@ def main():
     print "\nALL TITLES:"
     for t in release_titles:
         print t
+    '''
+    # How many bands named "First Aid Kit"
+    results = query_by_name(ARTIST_URL, query_type["simple"], "First Aid Kit")
+    count = 0
+    for artist in results['artists']:
+        if artist['name'] == "First Aid Kit":
+            count += 1
+    print "There are", count, "bands named 'First Aid Kit'."
+
+    # Begin-area name for Queen
+    results = query_by_name(ARTIST_URL, query_type["simple"], "Queen")
+    queen = [artist for artist in results["artists"] if artist["name"] == "Queen"]
+    print "Begin-area name for Queen is", queen[0]["begin-area"]["name"]
+
+    # Spanish alias for Beatles
+    results = query_by_name(ARTIST_URL, query_type["simple"], "Beatles")
+    beatles = [artist for artist in results["artists"] if artist["name"] == "The Beatles"]
+    print len(beatles)
+    pp = pprint.PrettyPrinter(indent=2)
+    pp.pprint([alias['name'] for alias in beatles[0]['aliases']])
+
+    # Nirvana disambiguation
+    results = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
+    nirvana = [artist for artist in results["artists"] if artist["name"] == "Nirvana"]
+    print "Nirvana disambiguation is", nirvana[0]["disambiguation"]
+
+    # When was One Direction was formed
+    results = query_by_name(ARTIST_URL, query_type["simple"], "One Direction")
+    onedirection = [artist for artist in results["artists"] if artist["name"] == "One Direction"]
+    print "One Direction was formed in", onedirection[0]["life-span"]["begin"]
 
 
 if __name__ == '__main__':
