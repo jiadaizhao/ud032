@@ -11,7 +11,12 @@ def extract_airports(page):
     data = []
     with open(page, "r") as html:
         # do something here to find the necessary values
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, "lxml")
+        al = soup.find(id="AirportList")
+        for ap in al.find_all("option"):
+            value = ap["value"]
+            if not value.startswith("All"):
+                data.append(value)
 
     return data
 

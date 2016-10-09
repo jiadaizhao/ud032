@@ -45,7 +45,16 @@ def process_file(f):
     
     with open("{}/{}".format(datadir, f), "r") as html:
 
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, "lxml")
+
+        for row in soup.find("table", class_="dataTDRight").find_all("tr", class_="dataTDRight"):
+            r = row.find_all("td")
+            if r[1].text != "TOTAL":
+                info["year"] = int(r[0].text)
+                info["month"] = int(r[1].text)
+                info["flights"] = {"domestic": int(r[2].text.replace(',', '')), \
+                                         "international" : int(r[3].text.replace(',', ''))}
+                data.append(info)
 
     return data
 
