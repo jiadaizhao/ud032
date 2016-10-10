@@ -23,6 +23,12 @@ CITIES = 'cities.csv'
 def fix_area(area):
 
     # YOUR CODE HERE
+    if area == "NULL" or area == "":
+        area = None
+    elif area.startswith("{"):
+        area = float(max(area[1:-1].split("|"), key=len))
+    else:
+        area = float(area)
 
     return area
 

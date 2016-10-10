@@ -22,6 +22,12 @@ CITIES = 'cities.csv'
 def fix_name(name):
 
     # YOUR CODE HERE
+    if name == "NULL":
+        name = []
+    elif name.startswith("{"):
+        name = name[1:-1].split("|")
+    else:
+        name = [name]
 
     return name
 
