@@ -30,6 +30,20 @@ def process_file(input_file, output_good, output_bad):
         header = reader.fieldnames
 
         #COMPLETE THIS FUNCTION
+        good_data = []
+        bad_data = []
+        for row in reader:
+            if row["URI"].startswith("http://dbpedia.org"):
+                year = row["productionStartYear"][:4]
+                try:
+                    year = int(year)
+                    if year >= 1886 and year <= 2014:
+                        row["productionStartYear"] = year
+                        good_data.append(row)
+                    else:
+                        bad_data.append(row)
+                except ValueError:
+                    bad_data.append(row)
 
 
 
@@ -38,7 +52,13 @@ def process_file(input_file, output_good, output_bad):
     with open(output_good, "w") as g:
         writer = csv.DictWriter(g, delimiter=",", fieldnames= header)
         writer.writeheader()
-        for row in YOURDATA:
+        for row in good_data:
+            writer.writerow(row)
+            
+    with open(output_bad, "w") as b:
+        writer = csv.DictWriter(b, delimiter=",", fieldnames= header)
+        writer.writeheader()
+        for row in bad_data:
             writer.writerow(row)
 
 
