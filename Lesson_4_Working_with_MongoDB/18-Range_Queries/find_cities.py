@@ -19,7 +19,7 @@ def get_db():
 
 def range_query():
     # You can use datetime(year, month, day) to specify date in the query
-    query = {}
+    query = {"foundingDate": {"$gte" : datetime(2001, 1, 1, 0, 0), "$lt" : datetime(2101, 1, 1, 0, 0)}}
     return query
 
 
@@ -31,4 +31,5 @@ if __name__ == "__main__":
 
     print "Found cities:", cities.count()
     import pprint
-    pprint.pprint(cities[0])
+    if cities.count() > 0:
+        pprint.pprint(cities[0])

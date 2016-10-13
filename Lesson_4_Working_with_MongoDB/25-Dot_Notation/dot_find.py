@@ -17,16 +17,17 @@ def get_db():
 
 
 def dot_query():
-    query = {}
+    query = {"dimensions.width" : {"$gt" : 2.5}}
     return query
 
 
 if __name__ == "__main__":
 
     db = get_db()
-    query = range_query()
+    query = dot_query()
     cars = db.cars.find(query)
 
     print "Found cars:", cars.count()
     import pprint
-    pprint.pprint(cars[0])
+    if cars.count() > 0:
+        pprint.pprint(cars[0])
