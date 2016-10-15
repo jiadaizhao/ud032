@@ -41,6 +41,7 @@ import codecs
 import csv
 import json
 import pprint
+import re
 
 DATAFILE = 'arachnid.csv'
 FIELDS ={'rdf-schema#label': 'label',
@@ -56,13 +57,22 @@ def add_field(filename, fields):
         for i in range(3):
             l = reader.next()
         # YOUR CODE HERE
+        for line in reader:
+            key = re.sub('\(.+\)', '', line['rdf-schema#label']).strip()
+
+            if line["binomialAuthority_label"] != "NULL":
+                data[key] = line["binomialAuthority_label"]
 
     return data
 
 
 def update_db(data, db):
     # YOUR CODE HERE
-    pass
+    for key in data.keys():
+        entry = db.arachnid.find_one({"label" : key})
+
+        entry["classification"]["binomialAuthority"] = data[key]
+        db.arachnid.save(entry)
 
 
 def test():
@@ -79,6 +89,7 @@ def test():
     update_db(data, db)
 
     updated = db.arachnid.find_one({'label': 'Opisthoncana'})
+    pprint.pprint(updated)
     assert updated['classification']['binomialAuthority'] == 'Embrik Strand'
     pprint.pprint(data)
 
